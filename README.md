@@ -28,10 +28,9 @@ AI-powered infrastructure vulnerability detection system for cloud and on-premis
 1. Place your model files in `app/models/`
 2. Set environment variable:
 ```bash
+
 export AI_MODEL_PATH=/app/models/your_model.h5
 
-### Quick Start
-```bash
 # Clone repository
 git clone https://github.com/saleny/AIVulnScan.git
 cd AIVulnScan
