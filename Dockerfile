@@ -1,7 +1,10 @@
 FROM python:3.10-slim as builder
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends build-essential && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    curl && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -15,7 +18,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 FROM python:3.10-slim as runtime
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends libgl1-mesa-glx && \
+    apt-get install -y --no-install-recommends \
+    libgl1-mesa-glx \
+    libpq5 && \
     rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -r appuser && useradd -r -g appuser -d /app -s /sbin/nologin -c "App User" appuser
@@ -30,11 +35,15 @@ COPY --chown=appuser:appuser . .
 ENV PATH="/opt/venv/bin:$PATH"
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
-ENV UWSGI_PROCESSES=4
-ENV UWSGI_THREADS=2
+ENV PYTHONPATH=/app
+ENV TZ=UTC
 
 RUN chmod -R g-w,o-rwx /app/app/models && \
-    chmod -R g-w,o-rwx /app/app/ai
+    chmod -R g-w,o-rwx /app/app/ai && \
+    chmod 644 /app/.env 2>/dev/null || true
+
+RUN mkdir -p /var/log/scanner && \
+    chown appuser:appuser /var/log/scanner
 
 EXPOSE 8000
 
@@ -46,4 +55,6 @@ CMD ["gunicorn", "app.main:app", \
      "--worker-class", "uvicorn.workers.UvicornWorker", \
      "--timeout", "120", \
      "--access-logfile", "-", \
-     "--error-logfile", "-"]
+     "--error-logfile", "-", \
+     "--capture-output", \
+     "--log-level", "info"]
