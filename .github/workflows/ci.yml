@@ -4,7 +4,7 @@ jobs:
   gitleaks-scan:
     runs-on: ubuntu-latest
     container:
-      image: zricethezav/gitleaks:v8.18.3
+      image: zricethezav/gitleaks:v8.24.3
     steps:
       - uses: actions/checkout@v4
         with:
