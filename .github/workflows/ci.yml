@@ -11,4 +11,4 @@ jobs:
       image: zricethezav/gitleaks:v8.18.3
     steps:
       - uses: actions/checkout@v3
-      - run: pwd && ls -la && gitleaks version && git config --global --add safe.directory /__w/AIVulnScan/AIVulnScan && gitleaks detect -v --no-banner --source=. --redact=50 --log-opts=HEAD
+      - run: pwd && ls -la && gitleaks version && git config --global --add safe.directory /__w/AIVulnScan/AIVulnScan && gitleaks detect -v --no-banner --source=. --redact=50 -log-opts="--all"
