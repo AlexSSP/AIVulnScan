@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  gitleaks-scan:
     runs-on: zricethezav/gitleaks:v8.18.3
     steps:
       - uses: actions/checkout@v3
