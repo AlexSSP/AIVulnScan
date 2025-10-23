@@ -7,4 +7,4 @@ jobs:
       image: zricethezav/gitleaks:v8.18.3
     steps:
       - uses: actions/checkout@v3
-      - run: pwd && ls -la && gitleaks version && gitleaks detect --redact -v --exit-code=2 --report-format=sarif --report-path=results.sarif --log-level=debug --log-opts=-1
+      - run: pwd && ls -la && gitleaks version && git config --global --add safe.directory /__w/AIVulnScan/AIVulnScan && gitleaks detect --redact -v --exit-code=2 --report-format=sarif --report-path=results.sarif --log-level=debug --log-opts=-1
