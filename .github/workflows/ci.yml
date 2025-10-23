@@ -1,0 +1,13 @@
+name: gitleaks
+on: [pull_request, push, workflow_dispatch]
+jobs:
+  gitleaks-scan:
+    runs-on: ubuntu-latest
+    container:
+      image: zricethezav/gitleaks:v8.24.3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: pwd && ls -la && gitleaks version && git config --global --add safe.directory /__w/AIVulnScan/AIVulnScan && gitleaks detect --redact -v --exit-code=2 --report-format=sarif --report-path=results.sarif --log-level=debug --log-opts="--all"
+
